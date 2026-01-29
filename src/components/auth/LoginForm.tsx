@@ -1,4 +1,3 @@
-// src/components/auth/LoginForm.tsx
 "use client";
 import { useState } from "react";
 import api from "@/lib/axios";
@@ -15,8 +14,8 @@ export default function LoginForm() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await api.post('/auth/login', { email, password }); // 
-      localStorage.setItem('token', response.data); // Store Mandatory JWT [cite: 80]
+      const response = await api.post('/auth/login', { email, password }); 
+      localStorage.setItem('token', response.data);
       router.push('/dashboard'); 
     } catch (err) {
       alert("Invalid credentials");

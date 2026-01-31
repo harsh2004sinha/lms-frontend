@@ -1,57 +1,100 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { 
+  LayoutDashboard, BookOpen, Award, PlusCircle, 
+  Users, CheckCircle, LogOut, ChevronLeft, ChevronRight 
+} from "lucide-react"
 
-export default function Sidebar({role}: {role: string | null}) {
-    const pathname = usePathname();
+export default function Sidebar({ role }: { role: string | null }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const pathname = usePathname();
 
-    const menuItems = {
-    STUDENT: [
-      { name: "My Courses", path: "/student/courses" },
-      { name: "Progress", path: "/student/dashboard" },
-      { name: "Certificates", path: "/student/certificates" },
+  const menuItems = {
+    ROLE_STUDENT: [
+      { name: "My Dashboard", path: "/student/dashboard", icon: LayoutDashboard },
+      { name: "My Courses", path: "/student/courses", icon: BookOpen },
+      { name: "Certificates", path: "/student/certificates", icon: Award },
     ],
-    MENTOR: [
-      { name: "Manage Courses", path: "/mentor/courses" },
-      { name: "Student Progress", path: "/mentor/dashboard" },
-      { name: "Create Course", path: "/mentor/courses/new" },
+    ROLE_MENTOR: [
+      { name: "My Dashboard", path: "/mentor/dashboard", icon: LayoutDashboard },
+      { name: "Manage Courses", path: "/mentor/courses", icon: BookOpen },
+      { name: "Create Course", path: "/mentor/courses/new", icon: PlusCircle },
     ],
-    ADMIN: [
-      { name: "User Management", path: "/admin/users" },
-      { name: "Approve Mentors", path: "/admin/approvals" },
-      { name: "Platform Analytics", path: "/admin/dashboard" },
+    ROLE_ADMIN: [
+      { name: "My Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
+      { name: "User Management", path: "/admin/users", icon: Users },
+      { name: "Approve Mentors", path: "/admin/approvals", icon: CheckCircle },
     ],
   };
 
   const links = menuItems[role as keyof typeof menuItems] || [];
+  const displayRole = role ? role.replace("ROLE_", "") : "GUEST";
 
   return (
-    <aside className="w-64 bg-gray-900 text-white min-h-screen p-6 transition-transform duration-300 ease-in-out fixed md:relative z-40">
-      <div className="mb-10">
-        <h2 className="text-xl font-bold text-blue-400">LMS Portal</h2>
-        <p className="text-xs text-gray-400 uppercase mt-1 tracking-widest">{role}</p>
+    <aside 
+      className={`bg-slate-950 text-slate-300 min-h-screen p-4 flex flex-col transition-all duration-300 ease-in-out border-r border-slate-800 sticky top-0 h-screen ${
+        isCollapsed ? "w-20" : "w-64"
+      }`}
+    >
+      <button 
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="absolute -right-3 hover:cursor-pointer top-10 bg-blue-600 text-white rounded-full p-1 border-2 border-slate-950 hover:bg-blue-700 transition-colors"
+      >
+        {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+      </button>
+
+      <div className={`mb-8 flex items-center gap-3 overflow-hidden ${isCollapsed ? "justify-center" : "px-2"}`}>
+        <div className="min-w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-xs font-bold text-white">
+          LMS
+        </div>
+        {!isCollapsed && <h2 className="text-xl font-bold text-white truncate">Portal</h2>}
       </div>
       
-      <nav className="space-y-2">
-        {links.map((link) => (
-          <Link 
-            key={link.path} 
-            href={link.path}
-            className={`block px-4 py-2.5 rounded-lg transition-colors ${
-              pathname === link.path ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-800 hover:text-white"
-            }`}
-          >
-            {link.name}
-          </Link>
-        ))}
+      {!isCollapsed && (
+        <div className="px-2 mb-6">
+          <span className="px-2 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold rounded border border-blue-500/20 block text-center">
+            {displayRole}
+          </span>
+        </div>
+      )}
+
+      <nav className="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
+        {links.map((link) => {
+          const Icon = link.icon;
+          const isActive = pathname === link.path;
+          return (
+            <Link 
+              key={link.path} 
+              href={link.path}
+              title={isCollapsed ? link.name : ""}
+              className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${
+                isActive 
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-900/20" 
+                  : "hover:bg-slate-900 hover:text-white"
+              } ${isCollapsed ? "justify-center" : ""}`}
+            >
+              <Icon className={`w-5 h-5 shrink-0 ${isActive ? "text-white" : "text-slate-500 group-hover:text-blue-400"}`} />
+              {!isCollapsed && <span className="text-sm font-medium truncate">{link.name}</span>}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="pt-4 mt-4 border-t border-slate-800">
         <button 
           onClick={() => { localStorage.clear(); window.location.href = "/"; }}
-          className="w-full text-left px-4 py-2.5 mt-10 text-red-400 hover:bg-red-900/20 rounded-lg transition-colors"
+          className={`flex items-center gap-3 w-full px-3 py-3 text-sm font-medium text-slate-400 hover:text-red-400 hover:bg-red-400/5 rounded-xl transition-all ${
+            isCollapsed ? "justify-center" : ""
+          }`}
+          title={isCollapsed ? "Logout" : ""}
         >
-          Logout
+          <LogOut className="w-5 h-5 shrink-0" />
+          {!isCollapsed && <span>Logout</span>}
         </button>
-      </nav>
+      </div>
     </aside>
   );
 }

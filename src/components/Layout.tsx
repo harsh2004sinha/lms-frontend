@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
+import Breadcrumbs from "./ui/Breadcrumbs";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { isLoggedIn, role } = useAuth();
@@ -18,10 +19,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex flex-1">
         {isLoggedIn && !isAuthPage && <Sidebar role={role} />}
         
-        <main className={`flex-1 transition-all duration-300 ${isLoggedIn && !isAuthPage ? "p-8" : ""}`}>
-          {children}
+        <main className={`flex-1 transition-all duration-300 bg-gray-50 ${isLoggedIn && !isAuthPage ? "p-6" : ""}`}>
+          {isLoggedIn && !isAuthPage && <Breadcrumbs />}
+          
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
         </main>
       </div>
+
       {!isLoggedIn && <Footer />}
     </div>
   );

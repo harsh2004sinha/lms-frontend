@@ -5,30 +5,35 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { 
   LayoutDashboard, BookOpen, Award, PlusCircle, 
-  Users, CheckCircle, LogOut, ChevronLeft, ChevronRight 
+  Users, CheckCircle, LogOut, ChevronLeft, ChevronRight, 
+  BarChart3,
+  UserCircle, 
 } from "lucide-react"
 
 export default function Sidebar({ role }: { role: string | null }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
-  const menuItems = {
-    ROLE_STUDENT: [
-      { name: "My Dashboard", path: "/student/dashboard", icon: LayoutDashboard },
-      { name: "My Courses", path: "/student/courses", icon: BookOpen },
-      { name: "Certificates", path: "/student/certificates", icon: Award },
-    ],
-    ROLE_MENTOR: [
-      { name: "My Dashboard", path: "/mentor/dashboard", icon: LayoutDashboard },
-      { name: "Manage Courses", path: "/mentor/courses", icon: BookOpen },
-      { name: "Create Course", path: "/mentor/courses/new", icon: PlusCircle },
-    ],
-    ROLE_ADMIN: [
-      { name: "My Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
-      { name: "User Management", path: "/admin/users", icon: Users },
-      { name: "Approve Mentors", path: "/admin/approvals", icon: CheckCircle },
-    ],
-  };
+const menuItems = {
+  ROLE_STUDENT: [
+    { name: "My Profile", path: "/profile", icon: UserCircle },
+    { name: "My Courses", path: "/student/courses", icon: BookOpen },
+    { name: "Progress", path: "/student/dashboard", icon: LayoutDashboard },
+    { name: "Certificates", path: "/student/certificates", icon: Award },
+  ],
+  ROLE_MENTOR: [
+    { name: "My Profile", path: "/profile", icon: UserCircle },
+    { name: "Manage Courses", path: "/mentor/courses", icon: BookOpen },
+    { name: "Student Progress", path: "/mentor/dashboard", icon: CheckCircle },
+    { name: "Create Course", path: "/mentor/courses/new", icon: PlusCircle },
+  ],
+  ROLE_ADMIN: [
+    { name: "My Profile", path: "/profile", icon: UserCircle },
+    { name: "User Management", path: "/admin/users", icon: Users },
+    { name: "Approve Mentors", path: "/admin/approvals", icon: CheckCircle },
+    { name: "Platform Analytics", path: "/admin/dashboard", icon: BarChart3 },
+  ],
+};
 
   const links = menuItems[role as keyof typeof menuItems] || [];
   const displayRole = role ? role.replace("ROLE_", "") : "GUEST";

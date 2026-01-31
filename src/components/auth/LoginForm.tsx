@@ -17,7 +17,7 @@ export default function LoginForm() {
       const response = await api.post('/auth/login', { email, password });
       localStorage.setItem('token', response.data.data.token);
       localStorage.setItem('role', response.data.data.role);
-      router.push('/dashboard'); 
+      router.push('/profile'); 
     } catch (err) {
       alert("Invalid credentials");
     } finally {

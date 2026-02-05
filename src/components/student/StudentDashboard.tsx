@@ -45,7 +45,7 @@ export default function StudentDashboard() {
         <h2 className="text-xl font-semibold">Active Courses</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {courses.map((course: any) => (
-            <CourseProgressCard key={course.id} course={course} />
+            <CourseProgressCard key={course.courseId} course={course} />
           ))}
         </div>
       </div>

@@ -10,7 +10,7 @@ export default function Footer() {
             <h3 className="text-xl font-bold text-white">LMS<span className="text-blue-500">Portal</span></h3>
             <p className="text-sm leading-relaxed max-w-xs">
               A production-style Internship Learning Management System built with 
-              Spring Boot and Next.js, emphasizing strict Role-Based Access Control[cite: 3, 7].
+              Spring Boot and Next.js, emphasizing strict Role-Based Access Control.
             </p>
           </div>
 

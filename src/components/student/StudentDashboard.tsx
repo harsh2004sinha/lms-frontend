@@ -1,7 +1,7 @@
 "use client";
 
 import { StatsCard } from "../ui/StatsCard";
-import { CourseProgressCard } from "../ui/CourseProgressCard";
+import CourseProgressCard from "../ui/CourseProgressCard";
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { BookOpen, CheckCircle, Award, Clock } from "lucide-react";

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
-import { CourseProgressCard } from "../ui/CourseProgressCard";
+import CourseProgressCard from "../ui/CourseProgressCard";
 import { Search, Filter } from "lucide-react";
 
 interface Course {

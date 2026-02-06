@@ -1,12 +1,31 @@
-export const CourseProgressCard = ({ course }: any) => {
-  const progress = course.progressPercentage || 0; 
+"use client";
+
+import { useRouter } from "next/navigation";
+import { PlayCircle, ExternalLink } from "lucide-react";
+
+const CourseProgressCard = ({ course }: any) => {
+  const router = useRouter();
+  const progress = course.progressPercentage || 0;
   const isCompleted = progress === 100;
 
+  const handleNavigate = () => {
+    router.push(`/student/courses/${course.courseId}`);
+  };
+
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+    <div 
+      onClick={handleNavigate}
+      className="group bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4 cursor-pointer hover:border-blue-400 hover:shadow-md transition-all relative overflow-hidden"
+    >
+      <div className="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+        <ExternalLink size={16} className="text-blue-500" />
+      </div>
+
       <div className="flex justify-between items-start">
         <div>
-          <h3 className="font-bold text-lg text-gray-800">{course.title}</h3>
+          <h3 className="font-bold text-lg text-gray-800 group-hover:text-blue-600 transition-colors">
+            {course.title}
+          </h3>
           <p className="text-xs text-gray-500 line-clamp-1">{course.description}</p>
         </div>
         <span className={`px-2 py-1 text-[10px] font-bold uppercase rounded ${
@@ -35,14 +54,23 @@ export const CourseProgressCard = ({ course }: any) => {
       </div>
 
       <button 
-        className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-all ${
+        className={`w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
           isCompleted 
             ? "bg-green-50 text-green-700 hover:bg-green-100 border border-green-200" 
-            : "bg-slate-900 text-white hover:bg-slate-800"
+            : "bg-slate-900 text-white hover:bg-slate-800 shadow-lg shadow-slate-200"
         }`}
       >
-        {isCompleted ? "Download Certificate" : "Continue Learning"}
+        {isCompleted ? (
+          <>View Details</>
+        ) : (
+          <>
+            <PlayCircle size={16} />
+            Continue Learning
+          </>
+        )}
       </button>
     </div>
   );
 };
+
+export default CourseProgressCard;
